@@ -200,3 +200,4 @@ print(myTree)
 print(classify(myTree, labels, [1,0]))
 print(classify(myTree, labels, [1,1]))
 print(classify(myTree, labels, [0,1]))
+
