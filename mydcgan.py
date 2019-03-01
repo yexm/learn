@@ -71,7 +71,6 @@ def Generator(z, is_training, reuse):
 
     # 图像的channel维度变化为1->1024->512->256->128->3
     depths = [1024, 512, 256, 128] + [data_shape[2]]
-
     with tf.variable_scope("Generator", reuse=reuse):
         # 第一层全连接层
         with tf.variable_scope("g_fc1", reuse=reuse):
@@ -96,7 +95,6 @@ def Generator(z, is_training, reuse):
             output = tf.layers.conv2d_transpose(output, depths[3], [5, 5], strides=(2, 2),
                                                 padding="SAME", trainable=is_training)
             output = tf.nn.relu(tf.layers.batch_normalization(output, training=is_training))
-
         # 第五层反卷积层128
         with tf.variable_scope("g_dc4", reuse=reuse):
             output = tf.layers.conv2d_transpose(output, depths[4], [5, 5], strides=(2, 2),
@@ -216,10 +214,9 @@ def training():
         logits=D_fake_logits, labels=tf.ones_like(D_fake_logits)))
 
     # 定义判别器的损失函数D_loss
-    D_loss_1 = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-        logits=D_true_logits, labels=tf.ones_like(D_true_logits)))
-    D_loss_2 = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
-        logits=D_fake_logits, labels=tf.zeros_like(D_fake_logits)))
+    D_loss_1 = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_true_logits, labels=tf.ones_like(D_true_logits)))
+    D_loss_2 = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=D_fake_logits, labels=tf.zeros_like(D_fake_logits)))
+
     D_loss = D_loss_1 + D_loss_2
 
     # 定义方差
@@ -273,3 +270,4 @@ def training():
 
 if __name__ == "__main__":
     training()
+
